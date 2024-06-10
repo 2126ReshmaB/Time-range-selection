@@ -1,0 +1,119 @@
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+
+const App = () => {
+  const [range, setRange] = useState('');
+  const timeRange = Array.from({ length: 22 }, (_, i) => i + 5);
+
+  const initialExcludedTime = JSON.parse(localStorage.getItem("time-picker")) || ['13'];
+  const [excludedTime, setExcludedTime] = useState([]);
+
+  const [selectedTime, setSelectedTime] = useState(JSON.parse(localStorage.getItem("time-picker")));
+
+  const handleTimeClick = (time) => {
+    setSelectedTime((prevSelectedTime) =>
+      prevSelectedTime.includes(time)
+        ? prevSelectedTime.filter((t) => t !== time)
+        : [...prevSelectedTime, time]
+    );
+    localStorage.setItem("time-picker", JSON.stringify(selectedTime));
+  };
+
+  const handleClick = () => {
+    const updatedExcludedTime = excludedTime.filter(time => time !== range);
+    localStorage.setItem("time-picker", JSON.stringify(updatedExcludedTime));
+    setExcludedTime(updatedExcludedTime);
+    setRange(''); // Clear the input field after removing the time
+  };
+
+  useEffect(() => {
+    localStorage.setItem("time-picker", JSON.stringify(selectedTime));
+
+    setExcludedTime(JSON.parse(localStorage.getItem("time-picker")));
+
+    console.log({
+      selectedTimeRange: ['2', '5-22'],
+      excludedTime: JSON.parse(localStorage.getItem("time-picker")),
+      selectedTime,
+    });
+  }, [selectedTime]);
+
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}>Select Time Slots</Text>
+      <View style={styles.timeGrid}>
+        {timeRange.map((time) => {
+          const timeString = time.toString();
+          const isSelected = selectedTime.includes(timeString);
+          const isExcluded = excludedTime.includes(timeString);
+
+          return (
+            <TouchableOpacity
+              key={time}
+              style={[styles.timeSlot, isSelected && styles.selected, isExcluded && styles.excluded]}
+              onPress={() => !isExcluded && handleTimeClick(timeString)}
+            >
+              <Text>{timeString}</Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+      <TextInput
+        style={styles.input}
+        value={range}
+        onChangeText={setRange}
+        keyboardType="numeric"
+      />
+      <TouchableOpacity style={styles.button} onPress={handleClick}>
+        <Text>Clear</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  header: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  timeGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
+  timeSlot: {
+    borderWidth: 1,
+    borderColor: 'black',
+    padding: 10,
+    margin: 5,
+  },
+  selected: {
+    backgroundColor: 'blue',
+    color: 'white',
+  },
+  excluded: {
+    backgroundColor: 'gray',
+    color: 'white',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: 'black',
+    padding: 10,
+    marginVertical: 10,
+    width: 200,
+  },
+  button: {
+    backgroundColor: 'red',
+    padding: 10,
+    borderRadius: 5,
+  },
+});
+
+export default App;
