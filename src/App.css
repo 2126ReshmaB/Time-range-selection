@@ -1,0 +1,45 @@
+/* TimePicker.css */
+
+.time-picker-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+}
+
+.time-picker-header {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.time-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 10px;
+}
+
+.time-slot {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.time-slot.selected {
+  background-color: #007bff;
+  color: white;
+}
+
+.time-slot.excluded {
+  background-color: #ff6347;
+  color: white;
+  pointer-events: none;
+}
+
+.time-slot span {
+  user-select: none;
+}
