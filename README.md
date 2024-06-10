@@ -1,3 +1,4 @@
+![Screenshot (275)](https://github.com/2126ReshmaB/Time-range-selection/assets/118461173/86a1e780-7f24-4370-8783-4e058724eeea)
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
